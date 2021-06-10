@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: "node-hn-app-sha256"
-        image: "gcr.io/smithery-1562771139878/node-hn-app@sha256:8fcd65ccdede43d88e71258ae93f4b775341cbf825333cfb1a165fa45a67882a"
+        image: "190569914001.dkr.ecr.us-west-2.amazonaws.com/u9898-1/node-hn-app"
 ---
 apiVersion: "autoscaling/v2beta1"
 kind: "HorizontalPodAutoscaler"
