@@ -10,8 +10,7 @@ phases:
   build:
     commands:
       - echo "Starting build phase on `date`."
-     # - docker build -t node-hn-app:latest .
-       - echo "Finished build phase."
+      - echo "Finished build phase."
   post-build:
     commands:
       - echo "Starting post-build phase on `date`."
