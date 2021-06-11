@@ -6,7 +6,9 @@ phases:
       - REGION="us-west-2"
       - ACCOUNT="$(aws ecr describe-repositories|grep "registryId"|uniq|cut -d ":" -f 2|sed 's/[ ,"]//g')"
       - IMAGE_REPO_NAME="$(aws ecr describe-repositories|grep "repositoryUri"|grep node|cut -d ":" -f 2|sed 's/[ ,"]//g'|cut -d "/" -f 2-3)"
+      - IMAGE_NAME="$(aws ecr describe-repositories|grep "repositoryUri"|grep node|cut -d ":" -f 2|sed 's/[ ,"]//g'|cut -d "/" -f 3)"
       - REPOSITORY_URI="$ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME"
+      - IMAGE_TAG=latest
       - echo "Logging into AWS ECR"
       - aws ecr get-login-password --region us-west-2|docker login --username AWS --password-stdin $ACCOUNT.dkr.ecr.$REGION.amazonaws.com
       - echo "$IMAGE_REPO_NAME"
@@ -14,9 +16,12 @@ phases:
   build:
     commands:
       - echo "Starting build phase on `date`."
-      - echo "Finished build phase."
+      - docker build -t $IMAGE_NAME .
+      - echo "Finished build phase on `date`."
   post_build:
     commands:
       - echo "Starting post-build phase on `date`."
+      - docker tag $IMAGE_NAME:$IMAGE_TAG $ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - docker push $ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME
       - echo "Finished CodeBuild build on `date`."
 
