@@ -1,7 +1,7 @@
 version: 0.2
 
 phases:
-  pre-build:
+  pre_build:
     commands:
       - echo "Logging into AWS ECR"
       - $(aws ecr get-login --no-include-email --region us-west-2)
@@ -11,7 +11,7 @@ phases:
     commands:
       - echo "Starting build phase on `date`."
       - echo "Finished build phase."
-  post-build:
+  post_build:
     commands:
       - echo "Starting post-build phase on `date`."
       - echo "Finished CodeBuild build on `date`."
