@@ -1,7 +1,7 @@
 version: 0.2
 env:
   variables:
-      AWS_DEFAULT_REGION: "us-west-2"
+      DEFAULT_REGION: "us-west-2"
       ACCOUNTIDAWS: "190569914001"
       IMAGE_REPO_NAME: "$(aws ecr describe-repositories|grep "repositoryUri"|grep node|cut -d ":" -f 2|sed 's/[ ,"]//g'|cut -d "/" -f 2-3)"
       REPOSITORY_URI: "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME"
@@ -10,7 +10,7 @@ phases:
   pre_build:
     commands:
       - echo "Logging into AWS ECR"
-      - aws ecr get-login-password --region us-west-2|docker login --username AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - aws ecr get-login-password --region us-west-2|docker login --username AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.$DEFAULT_REGION.amazonaws.com
       - echo "$IMAGE_REPO_NAME"
       - echo "$REPOSITORY_URI"
   build:
