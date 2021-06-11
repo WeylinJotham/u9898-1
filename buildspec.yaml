@@ -17,11 +17,11 @@ phases:
     commands:
       - echo "Starting build phase on `date`."
       - docker build -t $IMAGE_NAME .
+      - docker tag $IMAGE_NAME:$IMAGE_TAG $ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
       - echo "Finished build phase on `date`."
   post_build:
     commands:
-      - echo "Starting post-build phase on `date`."
-      - docker tag $IMAGE_NAME:$IMAGE_TAG $ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - echo "Starting post-build phase on `date`."      - 
       - docker push $ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME
       - echo "Finished CodeBuild build on `date`."
 
