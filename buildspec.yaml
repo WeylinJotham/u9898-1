@@ -1,23 +1,10 @@
 version: 0.2
 env:
-  variables: [
-    {
-      "name": AWS_DEFAULT_REGION
-      "value": us-west-2
-    }
-    {
-      "name": AWS_ACCOUNT_ID
-      "value": 190569914001
-    }
-    {
-      "name": IMAGE_REPO_NAME
-      "value": `aws ecr describe-repositories|grep "repositoryUri"|grep node|cut -d ":" -f 2|sed 's/[ ,"]//g'|cut -d "/" -f 2-3`
-    }
-    {
-      "name": REPOSITORY_URI
-      "value": $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME
-    }
-    ]
+  variables: 
+      AWS_DEFAULT_REGION: "us-west-2"
+      AWS_ACCOUNT_ID: "190569914001"
+      IMAGE_REPO_NAME: "`aws ecr describe-repositories|grep "repositoryUri"|grep node|cut -d ":" -f 2|sed 's/[ ,"]//g'|cut -d "/" -f 2-3`"
+      REPOSITORY_URI: "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME"
 
 phases:
   pre_build:
