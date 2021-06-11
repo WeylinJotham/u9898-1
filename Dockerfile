@@ -1,4 +1,5 @@
-FROM node:10.13-alpine
+FROM public.ecr.aws/bitnami/node:latest
+#FROM node:10.13-alpine
 ENV NODE_ENV production
 WORKDIR /usr/src/app
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
