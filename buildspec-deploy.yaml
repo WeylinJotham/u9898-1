@@ -28,10 +28,11 @@ phases:
       - IMAGE_NAME="$(aws ecr describe-repositories|grep "repositoryUri"|grep node|cut -d ":" -f 2|sed 's/[ ,"]//g'|cut -d "/" -f 3)"
       - REPOSITORY_URI="$ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME"
       - IMAGE_TAG=latest
+      - CODEBUILDROLEARN="arn:aws:iam::190569914001:role/MockStudyCodeBuildRole"
       - CLUSTER_NAME=$(aws eks list-clusters|sed 's/[ ,"{}:]//g'|sed 's/\]*\[*//g'|sed '/^$/d'|grep -v clusters)
       - echo "$CLUSTER_NAME"
       - echo "Setting kubeconfig"
-      - aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME
+      - aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME --role-arn $CODEBUILDROLEARN
       - cat ~/.kube/config
       - aws-iam-authenticator token
       - echo "Logging into AWS ECR"
