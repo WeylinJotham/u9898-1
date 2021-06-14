@@ -24,14 +24,11 @@ phases:
       - IMAGE_TAG=latest
       - CLUSTER_NAME=$(aws eks list-clusters|sed 's/[ ,"{}:]//g'|sed 's/\]*\[*//g'|sed '/^$/d'|grep -v clusters)
       - echo "Setting kubeconfig"
-      - aws eks update-kubeconfig --name 
+      - aws eks update-kubeconfig --name $CLUSTER_NAME 
       - echo "Logging into AWS ECR"
       - aws ecr get-login-password --region us-west-2|docker login --username AWS --password-stdin $ACCOUNT.dkr.ecr.$REGION.amazonaws.com
       - echo "$IMAGE_REPO_NAME"
       - echo "$REPOSITORY_URI"
-      - echo "Installing kubectl"
-      - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-      - sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
       - echo "Pre-build phase finished"
   build:
     commands:
