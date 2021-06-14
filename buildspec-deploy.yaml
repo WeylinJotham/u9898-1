@@ -23,8 +23,9 @@ phases:
       - REPOSITORY_URI="$ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME"
       - IMAGE_TAG=latest
       - CLUSTER_NAME=$(aws eks list-clusters|sed 's/[ ,"{}:]//g'|sed 's/\]*\[*//g'|sed '/^$/d'|grep -v clusters)
+      - echo "$CLUSTER_NAME"
       - echo "Setting kubeconfig"
-      - aws eks update-kubeconfig --name $CLUSTER_NAME 
+      - aws eks update-kubeconfig --region $REGION--name $CLUSTER_NAME 
       - echo "Logging into AWS ECR"
       - aws ecr get-login-password --region us-west-2|docker login --username AWS --password-stdin $ACCOUNT.dkr.ecr.$REGION.amazonaws.com
       - echo "$IMAGE_REPO_NAME"
@@ -37,8 +38,8 @@ phases:
       - docker tag $IMAGE_NAME:$IMAGE_TAG $ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
       - echo "Working directory is `pwd`"
       - /usr/bin/ls -l
-      - kubectl apply -f deployment.yaml
-      - kubectl apply -f portservice.yaml
+      - kubectl apply -f ./deployment.yaml
+      - kubectl apply -f ./portservice.yaml
       - echo "Finished build phase on `date`."
   post_build:
     commands:
