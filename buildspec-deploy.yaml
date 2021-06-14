@@ -11,6 +11,12 @@ phases:
       - PATH=$PATH:$HOME/bin
       - echo "Testing kubectl install"
       - kubectl version --client
+      - echo "Installing IAM Authenticator"
+      - curl -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.19.6/2021-01-05/bin/linux/amd64/aws-iam-authenticator
+      - chmod +x ./aws-iam-authenticator
+      - mkdir -p ~/.local/bin/aws-iam-authenticator && mv ./aws-iam-authenticator ~/.local/bin/aws-iam-authenticator
+      - echo "Testing IAM Authenticator"
+      - aws-iam-authenticator help
       - echo "Install phase finished"
   pre_build:
     commands:
@@ -24,13 +30,14 @@ phases:
       - IMAGE_TAG=latest
       - CLUSTER_NAME=$(aws eks list-clusters|sed 's/[ ,"{}:]//g'|sed 's/\]*\[*//g'|sed '/^$/d'|grep -v clusters)
       - echo "$CLUSTER_NAME"
-      - CODEBUILDROLEARN="arn:aws:iam::190569914001:role/service-role/codebuild-mockstudy2-node-hn-app-deploy-service-role"
       - echo "Setting kubeconfig"
-      - aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME --role-arn $CODEBUILDROLEARN
+      - aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME
+      - cat ~/.kube/config
       - echo "Logging into AWS ECR"
       - aws ecr get-login-password --region us-west-2|docker login --username AWS --password-stdin $ACCOUNT.dkr.ecr.$REGION.amazonaws.com
       - echo "$IMAGE_REPO_NAME"
       - echo "$REPOSITORY_URI"
+      - kubectl get svc
       - echo "Pre-build phase finished"
   build:
     commands:
