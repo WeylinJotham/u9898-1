@@ -1,0 +1,16 @@
+apiVersion: v1
+data:
+  mapRoles: |
+    - rolearn: arn:aws:iam::190569914001:role/eksctl-node-hn-app-dev-3-nodegrou-NodeInstanceRole-1UQ00GFLG6KUZ
+      username: system:node:{{EC2PrivateDNSName}}
+      groups:
+      - system:bootstrappers
+      - system:nodes
+    - rolearn: arn:aws:iam::190569914001:role/codebuild-mockstudy2-node-hn-app-deploy-service-role
+      username: codebuild-eks
+      groups:
+        - system:masters
+kind: ConfigMap
+metadata:
+  name: aws-auth
+  namespace: kube-system
