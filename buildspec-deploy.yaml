@@ -30,7 +30,7 @@ phases:
       - aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME
       - cat ~/.kube/config
       - echo "Creating $CLUSTER_NAME IAM identity mapping for ARN $CODEBUILDARN"
-      - eksctl create iamidentitymapping --cluster $CLUSTER_NAME --arn $CODEBUILDARN
+      - eksctl create iamidentitymapping --cluster $CLUSTER_NAME --arn $CODEBUILDARN --group system:masters --username codebuild-eks
       - echo "Logging into AWS ECR"
       - aws ecr get-login-password --region us-west-2|docker login --username AWS --password-stdin $ACCOUNT.dkr.ecr.$REGION.amazonaws.com
       - echo "$IMAGE_REPO_NAME"
