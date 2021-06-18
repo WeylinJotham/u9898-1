@@ -25,7 +25,7 @@ phases:
       - CLUSTER_NAME=$(aws eks list-clusters|sed 's/[ ,"{}:]//g'|sed 's/\]*\[*//g'|sed '/^$/d'|grep -v clusters)
       - echo "$CLUSTER_NAME"
       - CODEBUILDPROJECTNAME=$(aws codebuild list-projects --query "projects" --output text| tr "\t" "\n"| grep deploy)
-      - CODEBUILDARN=$(aws codebuild batch-get-projects --name $CODEBUILDPROJECTNAME --query "projects[*].[arn]" --output text)
+      - CODEBUILDARN=$(aws codebuild batch-get-projects --name $CODEBUILDPROJECTNAME --query "projects[*].[serviceRole]" --output text)
       - echo "Setting kubeconfig"
       - aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME
       - cat ~/.kube/config
