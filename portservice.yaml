@@ -4,7 +4,7 @@ kind: "Service"
 metadata:
   name: "node-hn-app-portservice"
   labels:
-    app: "node-hn-app"
+    app: "node-hn-app-portservice"
 spec:
   type: "LoadBalancer"
   selector: 
