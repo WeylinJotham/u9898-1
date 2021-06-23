@@ -22,7 +22,7 @@ phases:
       - IMAGE_NAME="$(aws ecr describe-repositories|grep "repositoryUri"|grep node|cut -d ":" -f 2|sed 's/[ ,"]//g'|cut -d "/" -f 3)"
       - REPOSITORY_URI="$ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME"
       - IMAGE_TAG=latest
-      - CLUSTER_NAME=$(aws eks list-clusters|sed 's/[ ,"{}:]//g'|sed 's/\]*\[*//g'|sed '/^$/d'|grep -v clusters)
+      - CLUSTER_NAME=$(aws eks list-clusters|sed 's/[ ,"{}:]//g'|sed 's/\]*\[*//g'|sed '/^$/d'|grep -v clusters|grep prod)
       - echo "$CLUSTER_NAME"
       - CODEBUILDPROJECTNAME=$(aws codebuild list-projects --query "projects" --output text| tr "\t" "\n"| grep deploy)
       - CODEBUILDARN=$(aws codebuild batch-get-projects --name $CODEBUILDPROJECTNAME --query "projects[*].[serviceRole]" --output text)
