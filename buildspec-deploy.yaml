@@ -24,13 +24,13 @@ phases:
       - IMAGE_TAG=latest
       - CLUSTER_NAME=$(aws eks list-clusters|sed 's/[ ,"{}:]//g'|sed 's/\]*\[*//g'|sed '/^$/d'|grep -v clusters|grep prod)
       - echo "$CLUSTER_NAME"
-      - CODEBUILDPROJECTNAME=$(aws codebuild list-projects --query "projects" --output text| tr "\t" "\n"| grep deploy)
-      - CODEBUILDARN=$(aws codebuild batch-get-projects --name $CODEBUILDPROJECTNAME --query "projects[*].[serviceRole]" --output text)
+      #- CODEBUILDPROJECTNAME=$(aws codebuild list-projects --query "projects" --output text| tr "\t" "\n"| grep deploy)
+      #- CODEBUILDARN=$(aws codebuild batch-get-projects --name $CODEBUILDPROJECTNAME --query "projects[*].[serviceRole]" --output text)
       - echo "Setting kubeconfig"
       - aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME
       - cat ~/.kube/config
-      - echo "Creating $CLUSTER_NAME IAM identity mapping for ARN $CODEBUILDARN"
-      - eksctl create iamidentitymapping --cluster $CLUSTER_NAME --arn $CODEBUILDARN --group system:masters --username codebuild-eks
+      #- echo "Creating $CLUSTER_NAME IAM identity mapping for ARN $CODEBUILDARN"
+      #- eksctl create iamidentitymapping --cluster $CLUSTER_NAME --arn $CODEBUILDARN --group system:masters --username codebuild-eks
       - echo "Logging into AWS ECR"
       - aws ecr get-login-password --region us-west-2|docker login --username AWS --password-stdin $ACCOUNT.dkr.ecr.$REGION.amazonaws.com
       - echo "$IMAGE_REPO_NAME"
